@@ -26,6 +26,21 @@ class Tank:
         else:
             print("Transfer is not possible.")
 
+    @classmethod
+    def find_most_water(cls):
+        return max(cls.tanks, key=lambda tank: tank.water_volume, default=None)
+
+    @classmethod
+    def find_most_filled(cls):
+        def fill_ratio(tank):
+            return tank.water_volume / tank.capacity
+
+        return max(cls.tanks, key=fill_ratio, default=None)
+
+    @classmethod
+    def find_empty_tanks(cls):
+        return list(filter(lambda tank: tank.water_volume == 0, cls.tanks))
+
 
 if __name__ == '__main__':
-    tank = Tank('tank', 100)
+    tank = Tank('tank', 100, 200)
