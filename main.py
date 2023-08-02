@@ -10,7 +10,6 @@ class OperationTracker:
         OperationTracker.operation_log.append((operation_time, operation_name, tank_name, volume, success))
 
 
-
 class Tank:
     tanks = []
 
@@ -27,6 +26,7 @@ class Tank:
             self.water_volume += volume
         else:
             print(f"you are not allowed to add more water than {self.capacity - self.water_volume}")
+        OperationTracker.log_operation('pour_water', self.name, volume, success)
 
     def pour_out_water(self, volume):
         success = volume <= self.water_volume
@@ -34,6 +34,7 @@ class Tank:
             self.water_volume -= volume
         else:
             print(f"Cannot pour out more than {self.water_volume} water.")
+        OperationTracker.log_operation('pour_out_water', self.name, volume, success)
 
     def transfer_water(self, from_tank, volume):
         success = self.water_volume + volume <= self.capacity and from_tank.water_volume >= volume
@@ -42,6 +43,7 @@ class Tank:
             self.water_volume += volume
         else:
             print("Transfer is not possible.")
+        OperationTracker.log_operation('transfer_water', self.name, volume, success)
 
     @classmethod
     def find_most_water(cls):
