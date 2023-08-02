@@ -9,6 +9,22 @@ class OperationTracker:
         operation_time = datetime.now()
         OperationTracker.operation_log.append((operation_time, operation_name, tank_name, volume, success))
 
+    @staticmethod
+    def most_Failed_Tank():
+        unsuccess_operations = (list(filter(lambda tank: tank[4] == False, OperationTracker.operation_log)))
+
+        tank_failure_counts = {}
+
+        for operation in unsuccess_operations:
+            tank_name = operation[2]
+            if tank_name in tank_failure_counts:
+                tank_failure_counts[tank_name] += 1
+            else:
+                tank_failure_counts[tank_name] = 1
+
+        most_failures_tank = max(tank_failure_counts, key=tank_failure_counts.get)
+        return most_failures_tank
+
 
 class Tank:
     tanks = []
@@ -68,7 +84,11 @@ if __name__ == '__main__':
     tank2 = Tank('tank2', 100, 500)
     tank2.pour_water(400)
     tank2.pour_out_water(50)
+    tank2.pour_out_water(50000)
+    tank2.pour_out_water(50000)
+    tank2.pour_out_water(50000)
     tank.transfer_water(tank2, 500)
     print(Tank.find_most_water().name)
     print(Tank.find_most_filled().name)
     print([tank.name for tank in Tank.find_empty_tanks()])
+    OperationTracker.most_Failed_Tank()
